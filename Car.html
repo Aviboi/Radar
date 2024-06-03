@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AD Car Animation</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #radar {
+            position: absolute;
+            top: 200px;
+            right: 120px;
+            width: 100px;
+            height: 300px;
+            background: url('radar.png');
+            background-size: 100% 100%;
+            color: white;
+            text-align: center;
+            font-size: 36px;
+            line-height: 336px; /
+        }
+
+   
+    </style>
+</head>
+<body>
+    <canvas id="carCanvas" width="800" height="400"></canvas>
+    <div id="radar">Speed: 0</div>
+
+    <script>
+        var canvas = document.getElementById("carCanvas");
+        var ctx = canvas.getContext("2d");
+        var background = new Image();
+        background.src = "background.jpg";
+        var radar = document.getElementById("radar");
+        var carImage1, carImage2, carImage3, carImage4;
+  
+        var radarX = canvas.width-120;
+        var radarText = " ";
+
+        var car1 = {
+            img: carImage1,
+            x: 100,
+            y: 200,
+            speed: Math.floor(Math.random()*25+10),
+        };
+
+       var car2 = {
+            img: carImage2,
+            x: 100,
+            y: 300,
+            speed: Math.floor(Math.random()*25+10),
+        };
+		
+		var car3 = {
+            img: carImage3,
+            x: 100,
+            y: 150,
+            speed: Math.floor(Math.random()*25+10),
+        };
+		
+		var car4 = {
+            img: carImage4,
+            x: 100,
+            y: 350,
+            speed: Math.floor(Math.random()*25+10),
+        };
+
+       
+
+        makeCar();
+        setInterval(moveCars, 100);
+        function makeCar(){
+            carImage1 = new Image();
+            carImage2 = new Image();
+			carImage3 = new Image();
+            carImage4 = new Image();
+               
+            carImage1.src = "car1.png";
+            carImage2.src = "car2.png";
+			carImage3.src = "car3.png";
+            carImage4.src = "car4.png";
+             
+            car1.img=carImage1;
+            car2.img=carImage2;
+			car3.img=carImage1;
+            car4.img=carImage2;
+          
+        }
+        function moveCars() {
+            
+            car1.x += car1.speed;
+            car2.x += car2.speed;
+			car3.x += car1.speed;
+            car4.x += car2.speed;
+			
+            updateScreen();
+           
+            startOver(car1);
+            startOver(car2);
+			startOver(car3);
+			startOver(car4);
+                
+            updateRadar(car1);
+            updateRadar(car2);
+			updateRadar(car3);
+            updateRadar(car4);
+        }
+        function updateScreen(){
+            ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+            ctx.drawImage(car1.img, car1.x, car1.y);
+            ctx.drawImage(car2.img, car2.x, car2.y);  
+			ctx.drawImage(car3.img, car3.x, car3.y);
+            ctx.drawImage(car4.img, car4.x, car4.y);  
+        }
+
+        // Start the animation
+        animate();
+        function startOver(car){
+              if (car.x > canvas.width) {
+                car.x = -car.img.width;
+                car.speed= Math.floor(Math.random()*25+10);
+             }
+               updateScreen(); 
+
+         }
+        function updateRadar(car) {
+          
+
+            if ( car.x + car.img.width/2 > radarX ){
+               if ( car.speed > 25 ) {
+                radar.style.color = "red";
+                } 
+               else 
+               {
+                radar.style.color = "black";
+               } 
+			   radarText = ""+car.speed;
+             }    
+           else
+             {
+                radarText = "--";
+                radar.style.color = "black";
+             } 
+
+           radar.innerHTML = radarText;  
+          updateScreen();
+         
+        }
+    </script>
+</body>
+</html>
